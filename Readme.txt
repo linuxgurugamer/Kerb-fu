@@ -16,7 +16,7 @@ Packaged in our demonstrator crate are a variety of rocketry, aviation and scien
 
 
 
-Forum 		http://forum.kerbalspaceprogram.com/threads/74625-0-23-5-Vertical-Propulsion-Emporium-v0-18a-(21st-Jun-2014)
+Forum 	https://forum.kerbalspaceprogram.com/index.php?/topic/67611-102-vertical-propulsion-emporium-v022b-10th-may-2015/
 
 
 

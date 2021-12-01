@@ -1,0 +1,340 @@
+PART
+{
+// Kerbal Space Program - Part Config
+// JetPack
+//
+
+// --- general parameters ---
+    name = JetPack
+    module = Part
+    author = Kerb-fu
+
+// --- asset parameters ---
+    mesh = model.mu
+    scale = 0.1
+    rescaleFactor = 1.0
+
+
+// --- node definitions ---
+    node_attach = 0.0, 0.0, -1.25, 0.0, 0.0, 1.0, 1
+    node_stack_bottom = 0.0, -3.5, 0.0, 0.0, 1.0, 0.0, 1
+
+// --- FX definitions ---
+
+    fx_exhaustFlame_blue_small = 0.0, -0.01, 0.0, 0.0, 1.0, 0.0, running
+    fx_exhaustLight_blue = 0.0, -0.01, 0.0, 0.0, 0.0, 1.0, running
+//fx_smokeTrail_light  = 0.0, -0.05, 0.0, 0.0, 1.0, 0.0, running
+//fx_exhaustSparks_flameout = 0.0, -0.05, 0.0, 0.0, 1.0, 0.0, flameout
+
+// --- Sound FX definition ---
+
+    sound_vent_medium = engage
+    sound_rocket_hard = running
+    sound_vent_soft = disengage
+    sound_explosion_low = flameout
+
+// --- editor parameters ---
+    TechRequired = precisionPropulsion
+    entryCost = 0
+    cost = 850
+    category = Pods
+    subcategory = 0
+    title = Jet Pack
+    manufacturer = Professor Kerbenstein's wonderous vertical propulsion emporium.
+    description = Remarkable Kerbal portable vertical propulsion unit, Impress your friends, get snacks off high shelves, Marvelous!
+
+// attachment rules: stack, srfAttach, allowStack, allowSrfAttach, allowCollision
+    attachRules = 0,1,0,1,1
+
+// --- standard part parameters ---
+    mass = 0.01
+    dragModelType = default
+    maximum_drag = 0.01
+    minimum_drag = 0.01
+    angularDrag = 0.01
+    crashTolerance = 32
+    maxTemp = 2000
+
+    stagingIcon = LIQUID_ENGINE
+
+    vesselType = Ship
+
+    MODULE
+    {
+        name = ModuleCommand
+        minimumCrew = 0
+    }
+
+    MODULE
+    {
+        name = ModuleSAS
+    }
+
+    MODULE
+    {
+        name = ModuleReactionWheel
+
+        PitchTorque = 0.1
+        YawTorque = 0.075
+        RollTorque = 0.1
+
+        RESOURCE
+        {
+            name = ElectricCharge
+            rate = 0.01
+        }
+    }
+
+    MODULE
+    {
+        name = KerbalSeat
+        seatPivotName = seatPivot
+        ejectDirection = 0, 1, 0.2
+        kM = 0.00001
+        HideHelmet = false
+    }
+
+    MODULE
+    {
+        name = KTengineHover
+        verticalSpeedIncrements = 1
+        thrustSmooth = 0.1
+    }
+
+    MODULE
+    {
+        name = KTvelocityController
+        thrustTransformName = RCSport
+        particleTextureName = KerbolQuest/jetpacks/rocket/rocketparticle
+        EmitterLocalVelocity = 0.0, 1.0, 0.0
+        transformThrustDirection = up // up or forward, defaults to forward
+        maxThrust = 0.0325 // max thrust per transform
+        resourceConsumption = 0.0075
+        minVelocityToActivate = 0.15
+        resourceName = MonoPropellant
+        thrustKey = space
+    }
+
+//    MODULE
+//    {
+//        name = ModuleEngines
+//        thrustVectorTransformName = thrustTransform
+//        exhaustDamage = false
+//        ignitionThreshold = 0.1
+//        minThrust = 0
+//        maxThrust = 5
+//        heatProduction = 100
+//        fxOffset = 0, 0, 0.1
+//        PROPELLANT
+//        {
+//            name = MonoPropellant
+//            ratio = 1
+//            DrawGauge = True
+//        }
+//        atmosphereCurve
+//        {
+//            key = 0 400
+//            key = 1 250
+//        }
+//    }
+
+	EFFECTS
+	{
+		runningengine
+		{
+			AUDIO
+			{
+				channel = Ship
+				clip = sound_rocket_mini
+				volume = 0.0 0.0
+				volume = 1.0 0.5
+				pitch = 0.0 0.5
+				pitch = 1.0 1.0
+				loop = true
+			}
+			MODEL_MULTI_PARTICLE
+			{
+				modelName = Squad/FX/Monoprop_big
+				transformName = thrustTransform
+				emission = 0.0 0.0
+				emission = 0.4 0.8
+				emission = 1.0 1.0
+				speed = 0.0 0.8
+				speed = 1.0 1.0
+				//localOffset = 0, 0, 1
+				localPosition = 0, 0, 0.12
+			}
+		}	
+		engage
+		{
+			AUDIO
+			{
+				channel = Ship
+				clip = sound_vent_soft
+				volume = 1.0
+				pitch = 2.0
+				loop = false
+			}
+		}
+		flameout
+		{
+			PREFAB_PARTICLE
+			{
+				prefabName = fx_exhaustSparks_flameout_2
+				transformName = thrustTransform
+				oneShot = true
+			}
+			AUDIO
+			{
+				channel = Ship
+				clip = sound_explosion_low
+				volume = 1.0
+				pitch = 2.0
+				loop = false
+			}
+		}	
+	}
+	MODULE
+	{
+		name = ModuleEnginesFX
+		thrustVectorTransformName = thrustTransform
+		exhaustDamage = False
+		ignitionThreshold = 0.1
+		minThrust = 0
+		maxThrust = 5
+		heatProduction = 30
+		fxOffset = 0, 0, 1.02
+		EngineType = MonoProp
+		exhaustDamageDistanceOffset = 0.25
+		runningEffectName = runningengine
+		PROPELLANT
+		{
+			name = MonoPropellant
+			ratio = 0.9
+			DrawGauge = True
+		}
+		atmosphereCurve
+		{
+			key = 0 250
+			key = 1 120
+			key = 4 0.001
+		}
+	}
+
+///////////////////
+
+
+    MODULE
+    {
+        name = ModuleGimbal
+        gimbalTransformName = thrustTransform
+        gimbalRange = 2.5
+    }
+
+    MODULE
+    {
+        name = ModuleGenerator
+        isAlwaysActive = True
+        OUTPUT_RESOURCE
+        {
+            name = ElectricCharge
+            rate = 0.01
+        }
+    }
+
+    MODULE
+    {
+        name = ModuleDecouple
+        ejectionForce = 5
+        explosiveNodeID = srf
+        isOmniDecoupler = true
+    }
+
+//    MODULE
+//    {
+//        name = ModuleRCS
+//        thrusterTransformName = RCSport
+//        thrusterPower = 0.1
+//        resourceName = MonoPropellant
+//        atmosphereCurve
+//        {
+//            key = 0 400
+//            key = 1 250
+//        }
+//    }
+
+	EFFECTS
+	{
+		runningrcs
+		{
+			AUDIO
+			{
+				channel = Ship
+				clip = sound_rocket_mini
+				volume = 0.0 0.0
+				volume = 0.02 0.2
+				volume = 0.5 0.2
+				volume = 1.0 0.2
+				pitch = 0.0 0.75
+				pitch = 1.0 1.5
+				loop = true
+			}
+			MODEL_MULTI_PARTICLE
+			{
+				modelName = Squad/FX/Monoprop_small
+				transformName = RCSport
+				emission = 0.0 0.0
+				emission = 0.1 0.0
+				emission = 1.0 1.0
+				speed = 0.0 0.8
+				speed = 1.0 1.0
+				localRotation = -90, 0, 0
+			}
+		}		
+	}
+	MODULE
+	{
+		name = ModuleRCSFX
+		stagingEnabled = False
+		thrusterTransformName = RCSport
+		thrusterPower = 0.2
+		resourceName = MonoPropellant
+		resourceFlowMode = STAGE_PRIORITY_FLOW
+		runningEffectName = runningrcs
+		atmosphereCurve
+		{
+			key = 0 240
+			key = 1 100
+			key = 4 0.001
+		}
+	}
+
+    RESOURCE
+    {
+        name = ElectricCharge
+        amount = 5
+        maxAmount = 5
+    }
+
+    RESOURCE
+    {
+        name = MonoPropellant
+        amount = 50
+        maxAmount = 50
+    }
+
+//    MODULE
+//    {
+//        name = KASModuleGrab
+//        evaPartPos = (0.0, 0.1, -0.35)
+//        evaPartDir = (0,0,1)
+//        attachOnEva = true
+//        attachOnPart = true
+//        storable = true
+//        storedSize = 14
+//        bayType = hookBay
+//        bayNode = top
+//        bayRot = (0.0, 0.0, 0.0)
+//    }
+
+}

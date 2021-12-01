@@ -1,0 +1,14 @@
+Changelog
+
+	0.22
+		Last version from Kerbalstuff
+
+	0.23.0
+		Removed all unnecessary "texture =" lines
+		Fixed some part files
+		Disabled the jetpack
+		Updated Readme with link to original thread (was renamed)
+		Moved directory into GameData
+		Ran a pretty-printer on files 
+		Converted all image files to dds
+		Fixed some files which had an old "module = "
